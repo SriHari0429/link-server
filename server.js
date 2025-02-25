@@ -33,7 +33,9 @@ app.get("/track/:id", async (req, res) => {
 
     // Detect social media bots
     const botKeywords = ["bot", "crawler", "spider", "WhatsApp", "facebook", "preview", "Telegram"];
-    if (req.headers["user-agent"] && botKeywords.some((keyword) => req.headers["user-agent"].toLowerCase().includes(keyword))) {
+    let userAgent = req.headers["user-agent"] ? req.headers["user-agent"].toLowerCase() : "";
+
+    if (botKeywords.some(keyword => userAgent.includes(keyword))) {
         console.log("Bot detected, ignoring request.");
         return res.status(403).send("Bot traffic detected, request ignored.");
     }
@@ -70,7 +72,6 @@ app.get("/track/:id", async (req, res) => {
     // Redirect user to the original destination
     res.redirect(destination);
 });
-
 // API to fetch visitor data
 app.get("/visitors", (req, res) => {
     res.json(visitorsData);
