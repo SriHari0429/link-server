@@ -15,13 +15,6 @@ app.use(express.static("public")); // Serve frontend files
 let linksDB = {}; // Store tracking links
 let visitorsData = []; // Store visitor details
 
-// Check for known bots and ignore their requests
-const botKeywords = ["bot", "crawler", "spider", "WhatsApp", "facebook", "preview", "Telegram"];
-if (botKeywords.some((keyword) => req.headers["user-agent"].toLowerCase().includes(keyword))) {
-    console.log("Bot detected, ignoring request.");
-    return res.status(403).send("Bot traffic detected, request ignored.");
-}
-
 // Generate a unique tracking link
 app.get("/generate", (req, res) => {
     let uniqueID = shortid.generate();
