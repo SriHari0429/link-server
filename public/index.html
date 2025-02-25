@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Link Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    </style>
+    <script>
+        async function generateLink() {
+            let response = await fetch("/generate");
+            let data = await response.json();
+            document.getElementById("link").innerHTML = `<a href="${data.trackingLink}" target="_blank">${data.trackingLink}</a>`;
+        }
+
+        async function fetchVisitors() {
+            let response = await fetch("/visitors");
+            let visitors = await response.json();
+            
+            let tableBody = document.getElementById("visitorTableBody");
+            tableBody.innerHTML = ""; // Clear existing data
+
+            visitors.forEach(visitor => {
+                let row = `<tr>
+                    <td>${visitor.ip}</td>
+                    <td>${visitor.isp}</td>
+                    <td>${visitor.vpnDetected}</td>
+                    <td>${visitor.country}</td>
+                    <td>${visitor.city}</td>
+                    <td>${visitor.region}</td>
+                    <td>${visitor.browser} ${visitor.browserVersion}</td>
+                    <td>${visitor.os} ${visitor.osVersion}</td>
+                    <td>${visitor.device}</td>
+                    <td>${visitor.referrer}</td>
+                    <td>${visitor.screenResolution}</td>
+                    <td>${visitor.networkType}</td>
+                    <td>${visitor.timestamp}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        setInterval(fetchVisitors, 5000); // Auto-refresh every 5 seconds
+    </script>
+</head>
+<body>
+    <h1>Tracking Link Generator</h1>
+    <button onclick="generateLink()">Generate Tracking Link</button>
+    <p id="link"></p>
+
+    <h2>Visitor Details</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>IP</th>
+                <th>ISP</th>
+                <th>VPN Detected</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Region</th>
+                <th>Browser</th>
+                <th>OS</th>
+                <th>Device</th>
+                <th>Referrer</th>
+                <th>Screen Resolution</th>
+                <th>Network Type</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody id="visitorTableBody"></tbody>
+    </table>
+</body>
+</html>
