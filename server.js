@@ -16,7 +16,8 @@ app.get("/generate", (req, res) => {
 
     linksDB[uniqueID] = destination;
 
-    let trackingLink = `http://localhost:${PORT}/track/${uniqueID}`;
+    let trackingLink = `https://${process.env.RAILWAY_STATIC_URL || 'your-app-name.up.railway.app'}/track/${uniqueID}`;
+
 
     console.log(`Generated Tracking Link: ${trackingLink}`);
 
